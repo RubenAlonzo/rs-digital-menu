@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Repostería Sánchez</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const CategoryCard = ({ imageSrc, title }) => (
+      <div className="flex flex-col justify-center mt-6 text-xl font-medium tracking-widest text-white whitespace-nowrap rounded-3xl shadow-sm bg-stone-400">
+        <div className="flex overflow-hidden relative flex-col justify-center w-full aspect-[3.15]">
+          <img loading="lazy" src={imageSrc} alt={title} className="object-cover absolute inset-0 size-full" />
+          <div className="relative justify-center items-center px-16 py-12 bg-black bg-opacity-30">
+            {title}
+          </div>
+        </div>
+      </div>
+    );
+
+    const ContactInfo = ({ icon, text }) => (
+      <div className="flex gap-2 mt-2 tracking-wide text-stone-500">
+        <img loading="lazy" src={icon} alt="" className="shrink-0 aspect-square w-[17px]" />
+        <div className="flex-auto">{text}</div>
+      </div>
+    );
+
+    function MyComponent() {
+      const categories = [
+        { imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/196b179e74c6d1d79897240557c5ac19e8c8a3ea7580a799b60993ebc83d6bed?apiKey=fb34ab8a011e440488e897e0309c7345&", title: "BODAS" },
+        { imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/b24c1a8a555f081def7204a99ee2ad405b28dc775f8a3149de54e68717aab16e?apiKey=fb34ab8a011e440488e897e0309c7345&", title: "CUMPLEAÑOS" },
+        { imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/b0d471b30a702e5d443057b43ecb86d1256635711322c7ab336806366bd71905?apiKey=fb34ab8a011e440488e897e0309c7345&", title: "OTROS" }
+      ];
+
+      return (
+        <div className="flex flex-col mx-auto w-full max-w-[480px]">
+          <header className="flex overflow-hidden relative flex-col items-start px-16 pt-5 pb-20 w-full aspect-[1.46]">
+            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ccaaab001102f9e76126bc224d5141549923fc432d12bdfb2ca44c060cbe19d?apiKey=fb34ab8a011e440488e897e0309c7345&" alt="Background" className="object-cover absolute inset-0 size-full" />
+            <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d24f49f81cd93cf18334d85ef533cb403a2f208335450fcf3b049a6967026575?apiKey=fb34ab8a011e440488e897e0309c7345&" alt="Logo" className="mb-6 ml-3.5 w-56 max-w-full aspect-[1.85]" />
+          </header>
+          <main className="flex z-10 flex-col px-5 py-12 mt-0 w-full text-sm bg-white rounded-[32px_32px_0px_0px] text-stone-700">
+            <h1 className="text-2xl font-bold">Repostería Sánchez</h1>
+            <ContactInfo
+              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/2afb95267d3e18088ec6ea2aef193bf99ce71386b03da037b6d0cb81208a817d?apiKey=fb34ab8a011e440488e897e0309c7345&"
+              text="Av. 26 de Agosto #9, Puerto Plata, Rep. Dom"
+            />
+            <ContactInfo
+              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/98d99997e6d87825b570b297e2d34a56364f8032bb41edc4cbaba7a368e64869?apiKey=fb34ab8a011e440488e897e0309c7345&"
+              text="(829) 910-9672 / (849) 859-6945"
+            />
+            <ContactInfo
+              icon="https://cdn.builder.io/api/v1/image/assets/TEMP/0ee35fa4e6940748077778c83f049d39ec3c8bc62ae1d5c07e72b90fcc46470c?apiKey=fb34ab8a011e440488e897e0309c7345&"
+              text="(809) 586-8851"
+            />
+            <p className="mt-5 text-lg tracking-wide">
+              Pastelería especializada en la creación de tartas matrimoniales
+            </p>
+            <h2 className="mt-8 text-2xl font-medium">Categorías</h2>
+            {categories.map((category, index) => (
+              <CategoryCard key={index} imageSrc={category.imageSrc} title={category.title} />
+            ))}
+          </main>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<MyComponent />, document.getElementById('root'));
+  </script>
+</body>
+</html>
