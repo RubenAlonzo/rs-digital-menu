@@ -1,12 +1,27 @@
 import React from 'react';
-import CategoryCard from '../components/CategoryCard';
+import CategoryItem from '../components/CategoryItem';
 import ContactInfo from '../components/ContactInfo';
 
-const Home = () => {
-  const categories = [
-    { imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/196b179e74c6d1d79897240557c5ac19e8c8a3ea7580a799b60993ebc83d6bed?apiKey=fb34ab8a011e440488e897e0309c7345&", title: "BODAS" },
-    { imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/b24c1a8a555f081def7204a99ee2ad405b28dc775f8a3149de54e68717aab16e?apiKey=fb34ab8a011e440488e897e0309c7345&", title: "CUMPLEAÑOS" },
-    { imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/b0d471b30a702e5d443057b43ecb86d1256635711322c7ab336806366bd71905?apiKey=fb34ab8a011e440488e897e0309c7345&", title: "OTROS" },
+function Details() {
+  const categoryItems = [
+    {
+      imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/a22331a40edffb09a4ff968ffd2882401e0f937ab1f3a5e301fe6619fe78e6d4?apiKey=fb34ab8a011e440488e897e0309c7345&",
+      title: "Bizcocho de Vainilla",
+      price: "4,500",
+      description: "Relleno con una suave crema batida y fresas frescas y jugosas."
+    },
+    {
+      imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/5aeb67c733c7f2eaa1e41fcbd6766f989d63840a4ddfa23f19ec745a1dffad4d?apiKey=fb34ab8a011e440488e897e0309c7345&",
+      title: "Bizcocho de Zanahoria",
+      price: "3,800",
+      description: "Relleno con una delicada crema y crujientes nueces."
+    },
+    {
+      imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/a897e0752626a30b7c02a76da924d16f9cb48a889288107711a14f84c88e464a?apiKey=fb34ab8a011e440488e897e0309c7345&",
+      title: "Bizcocho de Chocolate",
+      price: "4,700",
+      description: "Relleno con un exquisito ganache de chocolate, suave y cremoso."
+    }
   ];
 
   return (
@@ -32,13 +47,17 @@ const Home = () => {
         <p className="mt-5 text-lg tracking-wide text-stone-700">
           Pastelería especializada en la creación de tartas matrimoniales
         </p>
-      <h2 className="mt-8 text-2xl font-medium">Categorías</h2>
-      {categories.map((category, index) => (
-        <CategoryCard key={index} imageSrc={category.imageSrc} title={category.title} />
-      ))}
+        <h2 className="mt-7 text-2xl font-medium text-stone-700">
+          <span className="text-stone-500">Categorías /</span> Cumpleaños
+        </h2>
+        <div className="flex flex-col gap-3.5 mt-5">
+          {categoryItems.map((item, index) => (
+            <CategoryItem key={index} {...item} />
+          ))}
+        </div>
       </section>
     </main>
   );
-};
+}
 
-export default Home;
+export default Details;
