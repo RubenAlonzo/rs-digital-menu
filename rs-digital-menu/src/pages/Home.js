@@ -1,13 +1,25 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CategoryCard from '../components/CategoryCard';
 import ContactInfo from '../components/ContactInfo';
+import { getCategories } from '../services/categoryService';
 
 const Home = () => {
-  const categories = [
-    { imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/196b179e74c6d1d79897240557c5ac19e8c8a3ea7580a799b60993ebc83d6bed?apiKey=fb34ab8a011e440488e897e0309c7345&", title: "BODAS" },
-    { imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/b24c1a8a555f081def7204a99ee2ad405b28dc775f8a3149de54e68717aab16e?apiKey=fb34ab8a011e440488e897e0309c7345&", title: "CUMPLEAÑOS" },
-    { imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/b0d471b30a702e5d443057b43ecb86d1256635711322c7ab336806366bd71905?apiKey=fb34ab8a011e440488e897e0309c7345&", title: "OTROS" },
-  ];
+
+  // Use useState to initialize categories as an empty array
+  const [categories, setCategories] = useState([]);
+
+  // Use useEffect to fetch categories when the component mounts
+  useEffect(() => {
+    getCategories()
+      .then(data => {
+        // Update the categories state with the fetched data
+        setCategories(data);
+        console.log("Fetched categories:", categories);
+      })
+      .catch(error => {
+        console.error("Failed to fetch categories:", error);
+      });
+  }, []); // Empty dependency array means this effect runs once on mount
 
   return (
     <main className="flex flex-col mx-auto w-full max-w-[480px]">
@@ -32,10 +44,12 @@ const Home = () => {
         <p className="mt-4 text-custom-primary ">
           Pastelería especializada en la creación de tartas matrimoniales
         </p>
-      <h2 className="mt-4 text-lg text-lato font-medium text-custom-primary">Categorías</h2>
-      {categories.map((category, index) => (
-        <CategoryCard key={index} imageSrc={category.imageSrc} title={category.title} />
-      ))}
+        <h2 className="mt-4 text-lg text-lato font-medium text-custom-primary">Categorías</h2>
+        {categories
+          .sort((a, b) => a.position - b.position)
+          .map((category, index) => (
+            <CategoryCard key={index} imageSrc={category.imageUrl} title={category.name} />
+          ))}
       </section>
     </main>
   );

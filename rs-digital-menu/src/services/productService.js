@@ -5,7 +5,7 @@ import { db, storage } from "../firebaseConfig";
 // CRUD for Products
 
 // Create Product
-export const createProduct = async (productId, name, price, description, imageFile, isVisible, categoryId) => {
+export const createProduct = async (productId, name, price, description, imageFile, isVisible, position, categoryId) => {
   try {
     // Upload image to Cloud Storage
     const imageRef = ref(storage, `product_images/${productId}`);
@@ -19,6 +19,7 @@ export const createProduct = async (productId, name, price, description, imageFi
       description,
       imageUrl,
       isVisible,
+      position,
       categoryId
     });
   } catch (error) {

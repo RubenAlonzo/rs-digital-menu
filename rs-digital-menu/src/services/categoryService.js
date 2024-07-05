@@ -5,7 +5,7 @@ import { db, storage } from "../firebaseConfig";
 // CRUD for Categories
 
 // Create Category
-export const createCategory = async (categoryId, name, imageFile, isVisible) => {
+export const createCategory = async (categoryId, name, imageFile, isVisible, position) => {
   try {
     // Upload image to Cloud Storage
     const imageRef = ref(storage, `category_images/${categoryId}`);
@@ -16,7 +16,8 @@ export const createCategory = async (categoryId, name, imageFile, isVisible) => 
     await setDoc(doc(db, "categories", categoryId), {
       name,
       imageUrl,
-      isVisible
+      isVisible,
+      position
     });
   } catch (error) {
     console.error("Error creating category: ", error);
