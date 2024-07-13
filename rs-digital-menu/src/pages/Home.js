@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import CategoryCard from '../components/CategoryCard';
 import ContactInfo from '../components/ContactInfo';
 import { getCategories } from '../services/categoryService';
+import { logout } from '../services/authService';
+import Authorize from '../components/Authorize';
 
 const Home = () => {
 
@@ -28,7 +30,15 @@ const Home = () => {
         <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d24f49f81cd93cf18334d85ef533cb403a2f208335450fcf3b049a6967026575?apiKey=fb34ab8a011e440488e897e0309c7345&" alt="Logo" className="mb-6 ml-3.5 w-56 max-w-full aspect-[1.85]" />
       </header>
       <section className="flex rounded-t-3xl z-10 flex-col px-5 py-8 mt-0 w-full bg-white rounded-[32px_32px_0px_0px] border border-x-4 border-white">
-        <h1 className="text-lato text-xl font-bold leading-tight text-left text-custom-primary">Repostería Sánchez</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-lato text-xl font-bold leading-tight text-left text-custom-primary">Repostería Sánchez</h1>
+          <Authorize requireAdmin={false}>
+              <button onClick={logout} className="px-3 py-1 bg-gray-400 text-white rounded-full">Cerrar Sesión</button>
+          </Authorize>
+        </div>
+        <Authorize>
+            <p className='text-green-600 font-medium'>Sesión iniciada como adminstrador</p>
+        </Authorize>
         <ContactInfo
           icon="https://cdn.builder.io/api/v1/image/assets/TEMP/2afb95267d3e18088ec6ea2aef193bf99ce71386b03da037b6d0cb81208a817d?apiKey=fb34ab8a011e440488e897e0309c7345&"
           text="Av. 26 de Agosto #9, Puerto Plata, Rep. Dom"

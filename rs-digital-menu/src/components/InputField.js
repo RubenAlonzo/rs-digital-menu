@@ -1,0 +1,18 @@
+import React from 'react';
+
+function InputField({ label, placeholder, type = 'text', value, onChange }) {
+  return (
+    <>
+      <label className="mt-4 text-lg tracking-wide">{label}</label>
+      <input
+        placeholder={placeholder}
+        type={type}
+        value={value}
+        onChange={onChange}
+        className="justify-center items-start px-3.5 py-3 mt-2.5 tracking-wide rounded-xl bg-neutral-100 text-stone-500"
+      />
+    </>
+  );
+}
+
+export default InputField;
