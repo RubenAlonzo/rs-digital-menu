@@ -7,6 +7,12 @@ const CategoryCard = ({ imageSrc, title }) => (
       <div className="absolute top-0 left-0 right-0 bottom-0 flex justify-center items-center px-16 py-12 bg-black bg-opacity-30 text-lato font-normal">
         {title}
       </div>
+      <div className="absolute top-4 right-4 flex space-x-1">
+        <button className="bg-white rounded-l-full w-8 h-8 flex justify-center items-center">
+        </button>
+        <button className="bg-white rounded-r-full w-8 h-8 flex justify-center items-center">
+        </button>
+      </div>
     </div>
   </div>
 );
