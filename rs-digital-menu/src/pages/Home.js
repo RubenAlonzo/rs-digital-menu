@@ -66,7 +66,7 @@ const Home = () => {
           Pastelería especializada en la creación de tartas matrimoniales
         </p>
         <h2 className="mt-4 text-lg text-lato font-medium text-custom-primary">Categorías</h2>
-        <Authorize requireAdmin={false}>
+        <Authorize>
           <button onClick={handleOpenModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl">+</button>
         </Authorize>
 
