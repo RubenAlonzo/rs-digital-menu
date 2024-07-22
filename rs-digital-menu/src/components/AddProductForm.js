@@ -4,19 +4,28 @@ import Input from './Input';
 import TextArea from './TextArea';
 import Button from './Button';
 import ImageUpload from './ImageUpload';
+import { createProduct } from '../services/productService';
+import { useSearchParams } from 'react-router-dom';
 
 const AddProductForm = ({ isOpen, closeModal }) => {
   const [productName, setProductName] = useState('');
+  const [productPrice, setProductPrice] = useState('');
   const [description, setDescription] = useState('');
   const [isVisible, setIsVisible] = useState(true);
   const [image, setImage] = useState(null);
+  const [searchParams] = useSearchParams();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic
+
     console.log('Product name:', productName);
     console.log('Description:', description);
     console.log('Is visible:', isVisible);
+    console.log(searchParams.get('categoryId'));
+    
+    await createProduct({name: productName, price: productPrice, description: description, imageFile: image, isVisible: isVisible, position: 1, categoryId: searchParams.get('categoryId')})
+
     closeModal();
   };
 
@@ -41,6 +50,13 @@ const AddProductForm = ({ isOpen, closeModal }) => {
           placeholder="Producto"
           value={productName}
           onChange={(e) => setProductName(e.target.value)}
+        />
+        <Input
+          label="Precio del producto:"
+          placeholder="Precio"
+          value={productPrice}
+          type="number"
+          onChange={(e) => setProductPrice(e.target.value)}
         />
         <TextArea
           label="Descripción:"

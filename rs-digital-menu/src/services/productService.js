@@ -5,8 +5,10 @@ import { db, storage } from "../firebaseConfig";
 // CRUD for Products
 
 // Create Product
-export const createProduct = async (name, price, description, imageFile, isVisible, position, categoryId) => {
+export const createProduct = async ({ name, price, description, imageFile, isVisible, position, categoryId }) => {
   try {
+    console.log('categoryId', categoryId);
+
     // Convert categoryId to a DocumentReference
     const categoryRef = doc(db, "categories", categoryId);
 
@@ -22,9 +24,12 @@ export const createProduct = async (name, price, description, imageFile, isVisib
 
     const productId = productRef.id; // Get the auto-generated ID
 
-    // Upload image to Cloud Storage
+    // Upload image to Cloud Storage with the correct MIME type
     const imageRef = ref(storage, `product_images/${productId}`);
-    await uploadBytes(imageRef, imageFile);
+    const metadata = {
+      contentType: imageFile.type // Set the correct MIME type
+    };
+    await uploadBytes(imageRef, imageFile, metadata);
     const imageUrl = await getDownloadURL(imageRef);
 
     // Update the product with the image URL
@@ -35,7 +40,6 @@ export const createProduct = async (name, price, description, imageFile, isVisib
     throw error;
   }
 };
-
 // Read Products
 export const getProducts = async () => {
   const products = [];
@@ -47,11 +51,14 @@ export const getProducts = async () => {
 };
 
 // Read Products by Category
-export const getProductsByCategory = async (categoryId) => {
+export const getProductsByCategory = async (categoryId, isAdmin = false) => {
   const products = [];
   // Convert categoryId to a DocumentReference
   const categoryRef = doc(db, "categories", categoryId);
-  const q = query(collection(db, "products"), where("categoryId", "==", categoryRef));
+  let q = query(collection(db, "products"), where("categoryId", "==", categoryRef), where("isVisible", "==", true));
+  if (isAdmin) {
+    q = query(collection(db, "products"), where("categoryId", "==", categoryRef));
+  }
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     products.push({ id: doc.id, ...doc.data() });
