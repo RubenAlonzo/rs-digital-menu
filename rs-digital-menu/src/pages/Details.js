@@ -8,12 +8,14 @@ import AddProductForm from '../components/AddProductForm';
 import Authorize from '../components/Authorize';
 import { getProductsByCategory } from '../services/productService';
 import { useSearchParams } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
 function Details() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const { currentUser } = useAuth();
   
   // Use useState to initialize categories as an empty array
   const [products, setProducts] = useState([]);
@@ -23,16 +25,16 @@ function Details() {
 
   // Use useEffect to fetch categories when the component mounts
   useEffect(() => {
-      getProductsByCategory(searchParams.get('categoryId'))
+      getProductsByCategory(searchParams.get('categoryId'), currentUser?.claims?.admin)
       .then(data => {
         // Update the categories state with the fetched data
         setProducts(data);
-        console.log("Fetched products:", products);
+        console.log("Fetched products:1", products);
       })
       .catch(error => {
         console.error("Failed to fetch categories:", error);
       });
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [isModalOpen, searchParams]);
 
   return (
     <PageLayout
