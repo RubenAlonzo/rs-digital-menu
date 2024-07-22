@@ -1,29 +1,38 @@
-import { collection, doc, getDocs, setDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
+import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { db, storage } from "../firebaseConfig";
 
 // CRUD for Products
 
 // Create Product
-export const createProduct = async (productId, name, price, description, imageFile, isVisible, position, categoryId) => {
+export const createProduct = async (name, price, description, imageFile, isVisible, position, categoryId) => {
   try {
+    // Convert categoryId to a DocumentReference
+    const categoryRef = doc(db, "categories", categoryId);
+
+    // Add product to Firestore first to get the auto-generated ID
+    const productRef = await addDoc(collection(db, "products"), {
+      name,
+      price,
+      description,
+      isVisible,
+      position,
+      categoryId: categoryRef // Use DocumentReference here
+    });
+
+    const productId = productRef.id; // Get the auto-generated ID
+
     // Upload image to Cloud Storage
     const imageRef = ref(storage, `product_images/${productId}`);
     await uploadBytes(imageRef, imageFile);
     const imageUrl = await getDownloadURL(imageRef);
 
-    // Add product to Firestore
-    await setDoc(doc(db, "products", productId), {
-      name,
-      price,
-      description,
-      imageUrl,
-      isVisible,
-      position,
-      categoryId
-    });
+    // Update the product with the image URL
+    await updateDoc(productRef, { imageUrl });
+
   } catch (error) {
     console.error("Error creating product: ", error);
+    throw error;
   }
 };
 
@@ -40,7 +49,9 @@ export const getProducts = async () => {
 // Read Products by Category
 export const getProductsByCategory = async (categoryId) => {
   const products = [];
-  const q = query(collection(db, "products"), where("categoryId", "==", categoryId));
+  // Convert categoryId to a DocumentReference
+  const categoryRef = doc(db, "categories", categoryId);
+  const q = query(collection(db, "products"), where("categoryId", "==", categoryRef));
   const querySnapshot = await getDocs(q);
   querySnapshot.forEach((doc) => {
     products.push({ id: doc.id, ...doc.data() });
@@ -57,6 +68,11 @@ export const updateProduct = async (productId, updatedData) => {
       await uploadBytes(imageRef, updatedData.imageFile);
       updatedData.imageUrl = await getDownloadURL(imageRef);
       delete updatedData.imageFile;
+    }
+
+    // Convert categoryId to a DocumentReference if it's being updated
+    if (updatedData.categoryId) {
+      updatedData.categoryId = doc(db, "categories", updatedData.categoryId);
     }
 
     // Update product in Firestore

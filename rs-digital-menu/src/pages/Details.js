@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import CategoryItem from '../components/CategoryItem';
 import ContactInfo from '../components/ContactInfo';
 import PageLayout from '../components/PageLayout';
@@ -6,32 +6,33 @@ import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
 import Button from '../components/Button';
 import AddProductForm from '../components/AddProductForm';
 import Authorize from '../components/Authorize';
+import { getProductsByCategory } from '../services/productService';
+import { useSearchParams } from 'react-router-dom';
 
 function Details() {
-  const categoryItems = [
-    {
-      imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/a22331a40edffb09a4ff968ffd2882401e0f937ab1f3a5e301fe6619fe78e6d4?apiKey=fb34ab8a011e440488e897e0309c7345&",
-      title: "Bizcocho de Vainilla",
-      price: "4,500",
-      description: "Relleno con una suave crema batida y fresas frescas y jugosas."
-    },
-    {
-      imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/5aeb67c733c7f2eaa1e41fcbd6766f989d63840a4ddfa23f19ec745a1dffad4d?apiKey=fb34ab8a011e440488e897e0309c7345&",
-      title: "Bizcocho de Zanahoria",
-      price: "3,800",
-      description: "Relleno con una delicada crema y crujientes nueces."
-    },
-    {
-      imageSrc: "https://cdn.builder.io/api/v1/image/assets/TEMP/a897e0752626a30b7c02a76da924d16f9cb48a889288107711a14f84c88e464a?apiKey=fb34ab8a011e440488e897e0309c7345&",
-      title: "Bizcocho de Chocolate",
-      price: "4,700",
-      description: "Relleno con un exquisito ganache de chocolate, suave y cremoso."
-    }
-  ];
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  
+  // Use useState to initialize categories as an empty array
+  const [products, setProducts] = useState([]);
+  
+  // Use useSearchParams to get the categoryId from the URL
+  const [searchParams] = useSearchParams();
+
+  // Use useEffect to fetch categories when the component mounts
+  useEffect(() => {
+      getProductsByCategory(searchParams.get('categoryId'))
+      .then(data => {
+        // Update the categories state with the fetched data
+        setProducts(data);
+        console.log("Fetched products:", products);
+      })
+      .catch(error => {
+        console.error("Failed to fetch categories:", error);
+      });
+  }, []); // Empty dependency array means this effect runs once on mount
 
   return (
     <PageLayout
@@ -61,7 +62,7 @@ function Details() {
 
       <div className='mt-4 flex justify-between'>
         <h2 className="text-lg font-medium text-custom-primary">
-          <span className="text-stone-500">Categorías /</span> Cumpleaños
+          <span className="text-stone-500">Categorías /</span> {searchParams.get('name')}
         </h2>
         <Authorize>
           <div>
@@ -71,7 +72,9 @@ function Details() {
         </Authorize>
       </div>
       <div className="flex flex-col gap-3.5 mt-5">
-        {categoryItems.map((item, index) => (
+        {products
+          .sort((a, b) => a.position - b.position)
+          .map((item, index) => (
           <CategoryItem key={index} {...item} />
         ))}
       </div>
