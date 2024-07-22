@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {useState} from 'react';
 import CategoryItem from '../components/CategoryItem';
 import ContactInfo from '../components/ContactInfo';
 import PageLayout from '../components/PageLayout';
 import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
+import Button from '../components/Button';
+import AddProductForm from '../components/AddProductForm';
+import Authorize from '../components/Authorize';
 
 function Details() {
   const categoryItems = [
@@ -25,6 +28,10 @@ function Details() {
       description: "Relleno con un exquisito ganache de chocolate, suave y cremoso."
     }
   ];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <PageLayout
@@ -51,9 +58,18 @@ function Details() {
       }
       description="Pastelería especializada en la creación de tartas matrimoniales"
     >
-      <h2 className="mt-4 text-lg font-medium text-custom-primary">
-        <span className="text-stone-500">Categorías /</span> Cumpleaños
-      </h2>
+
+      <div className='mt-4 flex justify-between'>
+        <h2 className="text-lg font-medium text-custom-primary">
+          <span className="text-stone-500">Categorías /</span> Cumpleaños
+        </h2>
+        <Authorize>
+          <div>
+            <Button text="Agregar" onClick={openModal} className='text-sm bg-stone-400 hover:bg-stone-600' />
+            <AddProductForm isOpen={isModalOpen} closeModal={closeModal} />
+          </div>
+        </Authorize>
+      </div>
       <div className="flex flex-col gap-3.5 mt-5">
         {categoryItems.map((item, index) => (
           <CategoryItem key={index} {...item} />
