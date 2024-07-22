@@ -12,8 +12,8 @@ const ImageUpload = ({ label, onChange }) => {
       reader.onload = (e) => {
         const imageData = e.target.result;
         setImage(imageData);
-        onChange(imageData);
-        console.log('Selected image:', imageData);
+        onChange(file); // Pass the actual file instead of base64 data
+        console.log('Selected image:', file);
       };
       reader.readAsDataURL(file);
     } else {
