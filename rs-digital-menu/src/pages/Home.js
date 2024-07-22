@@ -4,6 +4,7 @@ import ContactInfo from '../components/ContactInfo';
 import { getCategories } from '../services/categoryService';
 import { logout } from '../services/authService';
 import Authorize from '../components/Authorize';
+import useNavigateSearch from '../hooks/useNavigateSearch';
 import ModalForm from '../components/ModalForm';
 import CategoryForm from '../components/CategoryForm';
 import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
@@ -26,6 +27,10 @@ const Home = () => {
         console.error("Failed to fetch categories:", error);
       });
   }, []); // Empty dependency array means this effect runs once on mount
+  
+  // Use the useNavigateSearch hook to navigate to the Details page
+  const navigateSearch = useNavigateSearch();
+  const goToDetails = (id, name) => navigateSearch('/details', { categoryId: id, name: name });
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -78,7 +83,7 @@ const Home = () => {
         {categories
           .sort((a, b) => a.position - b.position)
           .map((category, index) => (
-            <CategoryCard key={index} {...category} />
+            <CategoryCard key={index} {...category} onClick={() => goToDetails(category.id, category.name)} />
           ))}
       </section>
     </main>

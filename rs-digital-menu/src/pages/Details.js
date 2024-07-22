@@ -7,21 +7,23 @@ import Button from '../components/Button';
 import AddProductForm from '../components/AddProductForm';
 import Authorize from '../components/Authorize';
 import { getProductsByCategory } from '../services/productService';
+import { useSearchParams } from 'react-router-dom';
 
 function Details() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
   
   // Use useState to initialize categories as an empty array
   const [products, setProducts] = useState([]);
+  
+  // Use useSearchParams to get the categoryId from the URL
+  const [searchParams] = useSearchParams();
 
   // Use useEffect to fetch categories when the component mounts
   useEffect(() => {
-      getProductsByCategory('FT5NxEy3U7SkYrt81n3K')
+      getProductsByCategory(searchParams.get('categoryId'))
       .then(data => {
         // Update the categories state with the fetched data
         setProducts(data);
@@ -60,7 +62,7 @@ function Details() {
 
       <div className='mt-4 flex justify-between'>
         <h2 className="text-lg font-medium text-custom-primary">
-          <span className="text-stone-500">Categorías /</span> Cumpleaños
+          <span className="text-stone-500">Categorías /</span> {searchParams.get('name')}
         </h2>
         <Authorize>
           <div>
