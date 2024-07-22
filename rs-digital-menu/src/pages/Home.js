@@ -4,11 +4,15 @@ import ContactInfo from '../components/ContactInfo';
 import { getCategories } from '../services/categoryService';
 import { logout } from '../services/authService';
 import Authorize from '../components/Authorize';
+import ModalForm from '../components/ModalForm';
+import CategoryForm from '../components/CategoryForm';
+import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
 
 const Home = () => {
 
   // Use useState to initialize categories as an empty array
   const [categories, setCategories] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Use useEffect to fetch categories when the component mounts
   useEffect(() => {
@@ -22,6 +26,14 @@ const Home = () => {
         console.error("Failed to fetch categories:", error);
       });
   }, []); // Empty dependency array means this effect runs once on mount
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <main className="flex flex-col mx-auto w-full max-w-[480px]">
@@ -37,24 +49,32 @@ const Home = () => {
           </Authorize>
         </div>
         <Authorize>
-            <p className='text-green-600 font-medium'>Sesión iniciada como adminstrador</p>
+          <p className='text-green-600 font-medium'>Sesión iniciada como adminstrador</p>
         </Authorize>
         <ContactInfo
-          icon="https://cdn.builder.io/api/v1/image/assets/TEMP/2afb95267d3e18088ec6ea2aef193bf99ce71386b03da037b6d0cb81208a817d?apiKey=fb34ab8a011e440488e897e0309c7345&"
+          icon={LocationIcon}
           text="Av. 26 de Agosto #9, Puerto Plata, Rep. Dom"
         />
         <ContactInfo
-          icon="https://cdn.builder.io/api/v1/image/assets/TEMP/98d99997e6d87825b570b297e2d34a56364f8032bb41edc4cbaba7a368e64869?apiKey=fb34ab8a011e440488e897e0309c7345&"
+          icon={PhoneIcon}
           text="(829) 910-9672 / (849) 859-6945"
         />
         <ContactInfo
-          icon="https://cdn.builder.io/api/v1/image/assets/TEMP/7a544637ca15e4da94f703ec672bac2a774345ec8bf67a795bd97277191cf31d?apiKey=fb34ab8a011e440488e897e0309c7345&"
+          icon={WhatsAppIcon}
           text="(809) 586-8851"
         />
         <p className="mt-4 text-custom-primary ">
           Pastelería especializada en la creación de tartas matrimoniales
         </p>
         <h2 className="mt-4 text-lg text-lato font-medium text-custom-primary">Categorías</h2>
+        <Authorize>
+          <button onClick={handleOpenModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl">+</button>
+        </Authorize>
+
+        <ModalForm isOpen={isModalOpen} onClose={handleCloseModal}>
+          {<CategoryForm />}
+        </ModalForm>
+
         {categories
           .sort((a, b) => a.position - b.position)
           .map((category, index) => (
