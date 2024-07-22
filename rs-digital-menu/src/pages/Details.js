@@ -2,6 +2,7 @@ import React from 'react';
 import CategoryItem from '../components/CategoryItem';
 import ContactInfo from '../components/ContactInfo';
 import PageLayout from '../components/PageLayout';
+import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
 
 function Details() {
   const categoryItems = [
@@ -34,9 +35,18 @@ function Details() {
       
       contactInfo={
         <>
-          <ContactInfo icon="https://cdn.builder.io/api/v1/image/assets/TEMP/2afb95267d3e18088ec6ea2aef193bf99ce71386b03da037b6d0cb81208a817d?apiKey=fb34ab8a011e440488e897e0309c7345&" text="Av. 26 de Agosto #9, Puerto Plata, Rep. Dom" />
-          <ContactInfo icon="https://cdn.builder.io/api/v1/image/assets/TEMP/98d99997e6d87825b570b297e2d34a56364f8032bb41edc4cbaba7a368e64869?apiKey=fb34ab8a011e440488e897e0309c7345&" text="(829) 910-9672 / (849) 859-6945" />
-          <ContactInfo icon="https://cdn.builder.io/api/v1/image/assets/TEMP/7a544637ca15e4da94f703ec672bac2a774345ec8bf67a795bd97277191cf31d?apiKey=fb34ab8a011e440488e897e0309c7345&" text="(809) 586-8851" />
+          <ContactInfo
+          icon={LocationIcon}
+          text="Av. 26 de Agosto #9, Puerto Plata, Rep. Dom"
+        />
+        <ContactInfo
+          icon={PhoneIcon}
+          text="(829) 910-9672 / (849) 859-6945"
+        />
+        <ContactInfo
+          icon={WhatsAppIcon}
+          text="(809) 586-8851"
+        />
         </>
       }
       description="Pastelería especializada en la creación de tartas matrimoniales"
