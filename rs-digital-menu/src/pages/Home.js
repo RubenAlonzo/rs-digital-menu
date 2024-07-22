@@ -20,7 +20,7 @@ const Home = () => {
       .then(data => {
         // Update the categories state with the fetched data
         setCategories(data);
-        console.log("Fetched categories:", categories);
+        console.log("Fetched categories1:", categories);
       })
       .catch(error => {
         console.error("Failed to fetch categories:", error);
@@ -78,7 +78,7 @@ const Home = () => {
         {categories
           .sort((a, b) => a.position - b.position)
           .map((category, index) => (
-            <CategoryCard key={index} imageSrc={category.imageUrl} title={category.name} />
+            <CategoryCard key={index} {...category} />
           ))}
       </section>
     </main>
