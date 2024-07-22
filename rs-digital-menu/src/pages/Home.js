@@ -33,7 +33,7 @@ const Home = () => {
         <div className="flex items-center justify-between">
           <h1 className="text-lato text-xl font-bold leading-tight text-left text-custom-primary">Repostería Sánchez</h1>
           <Authorize requireAdmin={false}>
-              <button onClick={logout} className="px-3 py-1 bg-gray-400 text-white rounded-full">Cerrar Sesión</button>
+              <button onClick={logout} className="px-4 py-1 text-sm bg-gray-500 text-white rounded-full">Cerrar Sesión</button>
           </Authorize>
         </div>
         <Authorize>
