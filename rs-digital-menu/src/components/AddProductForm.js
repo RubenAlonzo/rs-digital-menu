@@ -77,8 +77,8 @@ const AddProductForm = ({ isOpen, closeModal }) => {
         </div>
         <ImageUpload label="Imagen de fondo:" onChange={setImage} />
         <div className="flex justify-end mt-6 space-x-4">
-          <Button type="button" text="Cancelar" onClick={handleCancel} className='bg-stone-500' />
-          <Button type="submit" text="Guardar"/>
+          <Button type="button" text="Cancelar" onClick={handleCancel} className='bg-stone-500 hover:bg-stone-600' />
+          <Button type="submit" text="Guardar" className='hover:bg-lime-700 '/>
         </div>
       </form>
     </Modal>
