@@ -8,7 +8,9 @@ import AddProductForm from '../components/AddProductForm';
 import Authorize from '../components/Authorize';
 import { getProductsByCategory } from '../services/productService';
 import { useSearchParams } from 'react-router-dom';
+import { fondoProductos, logoRS } from '../assets/icons/images';
 import { useAuth } from '../hooks/useAuth';
+
 
 function Details() {
 
@@ -38,8 +40,8 @@ function Details() {
 
   return (
     <PageLayout
-      logo="https://cdn.builder.io/api/v1/image/assets/TEMP/d24f49f81cd93cf18334d85ef533cb403a2f208335450fcf3b049a6967026575?apiKey=fb34ab8a011e440488e897e0309c7345&"
-      background="https://cdn.builder.io/api/v1/image/assets/TEMP/8ccaaab001102f9e76126bc224d5141549923fc432d12bdfb2ca44c060cbe19d?apiKey=fb34ab8a011e440488e897e0309c7345&"
+      logo={logoRS}
+      background={fondoProductos}
       
       title="Repostería Sánchez"
       

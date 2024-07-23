@@ -8,6 +8,8 @@ import useNavigateSearch from '../hooks/useNavigateSearch';
 import ModalForm from '../components/ModalForm';
 import CategoryForm from '../components/CategoryForm';
 import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
+import { fondoProductos, logoRS } from '../assets/icons/images';
+
 
 const Home = () => {
 
@@ -27,7 +29,7 @@ const Home = () => {
         console.error("Failed to fetch categories:", error);
       });
   }, []); // Empty dependency array means this effect runs once on mount
-  
+
   // Use the useNavigateSearch hook to navigate to the Details page
   const navigateSearch = useNavigateSearch();
   const goToDetails = (id, name) => navigateSearch('/details', { categoryId: id, name: name });
@@ -42,15 +44,16 @@ const Home = () => {
 
   return (
     <main className="flex flex-col mx-auto w-full max-w-[480px]">
-      <header className="flex overflow-hidden md:relative flex-col items-start px-16 pt-5 pb-20 w-full aspect-[2.46]">
-        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/8ccaaab001102f9e76126bc224d5141549923fc432d12bdfb2ca44c060cbe19d?apiKey=fb34ab8a011e440488e897e0309c7345&" alt="Background" className="object-cover absolute inset-0 " />
-        <img loading="lazy" src="https://cdn.builder.io/api/v1/image/assets/TEMP/d24f49f81cd93cf18334d85ef533cb403a2f208335450fcf3b049a6967026575?apiKey=fb34ab8a011e440488e897e0309c7345&" alt="Logo" className="mb-6 ml-3.5 w-56 max-w-full aspect-[1.85]" />
+      <header className="flex overflow-hidden md:relative flex-col items-center justify-center px-16 pt-5 pb-5 w-full aspect-[2.46]">
+        <img loading="lazy" src={fondoProductos} alt="Background" className="object-cover absolute inset-0 z-0 opacity-90" />
+
+        <img loading="lazy" src={logoRS} alt="Logo" className="mb-3 w-56 max-w-full aspect-[1.85] relative z-10" />
       </header>
-      <section className="flex rounded-t-3xl z-10 flex-col px-5 py-8 mt-0 w-full bg-white rounded-[32px_32px_0px_0px] border border-x-4 border-white">
+      <section className="flex rounded-t-3xl z-10 flex-col px-5 py-8 -mt-5 w-full bg-white rounded-[32px_32px_0px_0px] border border-x-4 border-white">
         <div className="flex items-center justify-between">
           <h1 className="text-lato text-xl font-bold leading-tight text-left text-custom-primary">Repostería Sánchez</h1>
           <Authorize requireAdmin={false}>
-              <button onClick={logout} className="px-4 py-1 text-sm bg-gray-500 text-white rounded-full">Cerrar Sesión</button>
+            <button onClick={logout} className="px-4 py-1 text-sm bg-gray-500 text-white rounded-full">Cerrar Sesión</button>
           </Authorize>
         </div>
         <Authorize>

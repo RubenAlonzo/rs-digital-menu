@@ -19,7 +19,7 @@ function LoginForm({ onLogin }) {
   };
 
   return (
-    <form onSubmit={handleLogin} className="flex relative flex-col px-5 py-12 mt-14 mb-32 bg-white rounded-3xl">
+    <form onSubmit={handleLogin} className="flex relative flex-col px-5 py-12 mt-4 mb-32 bg-white rounded-3xl">
       <h2 className="text-2xl font-bold text-stone-800">Acceder</h2>
       {error && <p className="text-red-500">{error}</p>}
       <Input label="Usuario:" placeholder="example@app.com" value={email} onChange={(e) => setEmail(e.target.value)} />
