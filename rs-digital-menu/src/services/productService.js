@@ -1,5 +1,5 @@
 import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, query, where } from "firebase/firestore";
-import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
+import { ref, uploadBytes, getDownloadURL, deleteObject, getMetadata } from "firebase/storage";
 import { db, storage } from "../firebaseConfig";
 
 // CRUD for Products
@@ -7,7 +7,10 @@ import { db, storage } from "../firebaseConfig";
 // Create Product
 export const createProduct = async ({ name, price, description, imageFile, isVisible, position, categoryId }) => {
   try {
-    console.log('categoryId', categoryId);
+    // TODO: Add validation for required fields
+    if (!name || !price || !description || !imageFile || !categoryId) {
+      throw new Error("Missing required fields");
+    }
 
     // Convert categoryId to a DocumentReference
     const categoryRef = doc(db, "categories", categoryId);
@@ -40,6 +43,7 @@ export const createProduct = async ({ name, price, description, imageFile, isVis
     throw error;
   }
 };
+
 // Read Products
 export const getProducts = async () => {
   const products = [];
@@ -92,9 +96,21 @@ export const updateProduct = async (productId, updatedData) => {
 // Delete Product
 export const deleteProduct = async (productId) => {
   try {
-    // Delete image from Cloud Storage
+    // Reference to the image in Cloud Storage
     const imageRef = ref(storage, `product_images/${productId}`);
-    await deleteObject(imageRef);
+
+    // Attempt to delete the image from Cloud Storage
+    try {
+      await deleteObject(imageRef);
+      console.log("Image deleted at path:", imageRef.fullPath);
+    } catch (error) {
+      if (error.code === 'storage/object-not-found') {
+        console.log("Image does not exist, skipping deletion.");
+      } else {
+        console.error("Error deleting image: ", error);
+        throw error;
+      }
+    }
 
     // Delete product from Firestore
     await deleteDoc(doc(db, "products", productId));
