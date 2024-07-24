@@ -5,8 +5,7 @@ import { getCategories } from '../services/categoryService';
 import { logout } from '../services/authService';
 import Authorize from '../components/Authorize';
 import useNavigateSearch from '../hooks/useNavigateSearch';
-import ModalForm from '../components/ModalForm';
-import CategoryForm from '../components/CategoryForm';
+import AddCategoryForm from '../components/AddCategoryForm';
 import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
 import { fondoProductos, logoRS } from '../assets/icons/images';
 
@@ -16,6 +15,8 @@ const Home = () => {
   // Use useState to initialize categories as an empty array
   const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   // Use useEffect to fetch categories when the component mounts
   useEffect(() => {
@@ -28,19 +29,11 @@ const Home = () => {
       .catch(error => {
         console.error("Failed to fetch categories:", error);
       });
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [isModalOpen]); // Empty dependency array means this effect runs once on mount
 
   // Use the useNavigateSearch hook to navigate to the Details page
   const navigateSearch = useNavigateSearch();
   const goToDetails = (id, name) => navigateSearch('/details', { categoryId: id, name: name });
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <main className="flex flex-col mx-auto w-full max-w-[480px]">
@@ -76,12 +69,13 @@ const Home = () => {
         </p>
         <h2 className="mt-4 text-lg text-lato font-medium text-custom-primary">Categorías</h2>
         <Authorize>
-          <button onClick={handleOpenModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl hover:bg-lime-600">+</button>
+          <button onClick={openModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl hover:bg-lime-600">+</button>
+          <AddCategoryForm isOpen={isModalOpen} closeModal={closeModal} />
         </Authorize>
 
-        <ModalForm isOpen={isModalOpen} onClose={handleCloseModal}>
+        {/* <ModalForm isOpen={isModalOpen} onClose={handleCloseModal}>
           {<CategoryForm />}
-        </ModalForm>
+        </ModalForm> */}
 
         {categories
           .sort((a, b) => a.position - b.position)

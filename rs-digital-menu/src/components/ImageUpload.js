@@ -4,6 +4,7 @@ import { useState } from 'react';
 const ImageUpload = ({ label, onChange }) => {
   const [image, setImage] = useState(null);
   const [dragging, setDragging] = useState(false);
+  const [error, setError] = useState('');
 
   const handleImageChange = (e) => {
     const file = e.target.files ? e.target.files[0] : e.dataTransfer.files[0];
@@ -13,11 +14,13 @@ const ImageUpload = ({ label, onChange }) => {
         const imageData = e.target.result;
         setImage(imageData);
         onChange(file); // Pass the actual file instead of base64 data
-        console.log('Selected image:', file);
+        setError('');
       };
       reader.readAsDataURL(file);
     } else {
-      console.error('Unsupported file format');
+      setError('Formato de archivo no soportado. Por favor, sube una imagen JPEG o PNG.');
+      setImage(null); 
+      onChange(null); 
     }
   };
 
@@ -46,7 +49,7 @@ const ImageUpload = ({ label, onChange }) => {
         onDrop={handleDrop}
       >
         {image ? (
-          <img src={image} alt="Selected" className="h-full" />
+          <img src={image} alt="Selected" className="h-full object-cover" />
         ) : (
           <label className="cursor-pointer">
             Subir imagen de producto
@@ -59,6 +62,7 @@ const ImageUpload = ({ label, onChange }) => {
           </label>
         )}
       </div>
+      {error && <p className="mt-2 text-red-600">{error}</p>}
     </div>
   );
 };
