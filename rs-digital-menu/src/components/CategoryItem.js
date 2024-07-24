@@ -9,12 +9,12 @@ const CategoryItem = ({ imageUrl, name, price, description }) => (
     <div className="ml-4 text-base font-semibold text-stone-600">
       <h3>{name}</h3>
       <Authorize>
-        <div className="absolute top-5 right-1 flex items-center">
-          <button className="bg-gray-100 rounded-l-full w-8 h-8 flex justify-center items-center">
+        <div className="absolute top-1 right-1 flex items-center">
+          <button className="bg-gray-100 rounded-l-full w-10 h-10 flex justify-center items-center hover:bg-gray-300">
             <EditIcon />
           </button>
-          <div className="w-px h-8 bg-gray-500"></div>
-          <button className="bg-gray-100 rounded-r-full w-8 h-8 flex justify-center items-center">
+          <div className="w-px h-10 bg-gray-300"></div>
+          <button className="bg-gray-100 rounded-r-full w-10 h-10 flex justify-center items-center hover:bg-gray-300">
             <DeleteIcon />
           </button>
         </div>

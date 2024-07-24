@@ -12,7 +12,7 @@ const PageLayout = ({ logo, background, contactInfo, title, description, childre
   return (
     <main className="flex flex-col mx-auto w-full max-w-[480px]">
       <header className="flex overflow-hidden md:relative flex-col items-center justify-center px-16 pt-5 pb-5 w-full aspect-[2.46]">
-        <div className="absolute top-5 left-5 z-20">
+        <div className="absolute top-5 left-5 z-10">
           <button onClick={homeClick} className="bg-white hover:bg-gray-100 text-white font-bold py-3 px-3 rounded-full">
             <ArrowBackIcon/>
           </button>

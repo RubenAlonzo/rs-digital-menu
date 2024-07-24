@@ -11,11 +11,11 @@ const CategoryCard = ({ imageUrl, name, onClick }) => (
       </div>
       <Authorize>
         <div className="absolute top-4 right-4 flex items-center">
-          <button className="bg-white rounded-l-full w-8 h-8 flex justify-center items-center">
+          <button className="bg-white rounded-l-full w-12 h-12 flex justify-center items-center hover:bg-gray-300">
             <EditIcon />
           </button>
-          <div className="w-px h-8 bg-gray-500"></div>
-          <button className="bg-white rounded-r-full w-8 h-8 flex justify-center items-center">
+          <div className="w-px h-12 bg-gray-300"></div>
+          <button className="bg-white rounded-r-full w-12 h-12 flex justify-center items-center hover:bg-gray-300">
             <DeleteIcon />
           </button>
         </div>

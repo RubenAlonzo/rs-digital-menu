@@ -53,7 +53,7 @@ const Home = () => {
         <div className="flex items-center justify-between">
           <h1 className="text-lato text-xl font-bold leading-tight text-left text-custom-primary">Repostería Sánchez</h1>
           <Authorize requireAdmin={false}>
-            <button onClick={logout} className="px-4 py-1 text-sm bg-gray-500 text-white rounded-full">Cerrar Sesión</button>
+            <button onClick={logout} className="px-4 py-1 text-sm bg-gray-500 text-white rounded-full hover:bg-gray-600">Cerrar Sesión</button>
           </Authorize>
         </div>
         <Authorize>
@@ -76,7 +76,7 @@ const Home = () => {
         </p>
         <h2 className="mt-4 text-lg text-lato font-medium text-custom-primary">Categorías</h2>
         <Authorize>
-          <button onClick={handleOpenModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl">+</button>
+          <button onClick={handleOpenModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl hover:bg-lime-600">+</button>
         </Authorize>
 
         <ModalForm isOpen={isModalOpen} onClose={handleCloseModal}>
