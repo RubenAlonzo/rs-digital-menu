@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import CategoryCard from '../components/CategoryCard';
 import ContactInfo from '../components/ContactInfo';
-import { getCategories } from '../services/categoryService';
+import { getCategories, deleteCategory } from '../services/categoryService';
 import { logout } from '../services/authService';
 import Authorize from '../components/Authorize';
 import useNavigateSearch from '../hooks/useNavigateSearch';
-import ModalForm from '../components/ModalForm';
-import CategoryForm from '../components/CategoryForm';
+import AddCategoryForm from '../components/AddCategoryForm';
 import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
 import { fondoProductos, logoRS } from '../assets/icons/images';
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 
 
 const Home = () => {
@@ -16,6 +16,60 @@ const Home = () => {
   // Use useState to initialize categories as an empty array
   const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  useEffect(() => {
+    loadCategories(); // Cargar categorías al montar el componente
+  }, []);
+
+  const loadCategories = async () => {
+    try {
+      const data = await getCategories();
+      setCategories(data);
+      console.log("Fetched categories:", data);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    }
+  };
+
+  const openModal = () => {
+    setSelectedCategory(null);
+    setIsModalOpen(true);
+  };
+
+  const handleEditClick = (category) => {
+    setSelectedCategory(category);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = (categoryId) => {
+    setSelectedCategory(categoryId); // Guardar el ID de la categoría a eliminar
+    setDeleteModalOpen(true); // Abrir el modal de confirmación
+  };
+
+  const confirmDelete = async () => {
+    if (selectedCategory) {
+      try {
+        await deleteCategory(selectedCategory);
+        loadCategories(); // Volver a cargar las categorías después de la eliminación
+      } catch (error) {
+        console.error("Error deleting category:", error);
+      }
+    }
+    setDeleteModalOpen(false); // Cerrar el modal de confirmación
+    setSelectedCategory(null); // Limpiar la categoría seleccionada
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+    setSelectedCategory(null);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedCategory(null);
+  };
 
   // Use useEffect to fetch categories when the component mounts
   useEffect(() => {
@@ -28,19 +82,11 @@ const Home = () => {
       .catch(error => {
         console.error("Failed to fetch categories:", error);
       });
-  }, []); // Empty dependency array means this effect runs once on mount
+  }, [isModalOpen]);
 
   // Use the useNavigateSearch hook to navigate to the Details page
   const navigateSearch = useNavigateSearch();
   const goToDetails = (id, name) => navigateSearch('/details', { categoryId: id, name: name });
-
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
 
   return (
     <main className="flex flex-col mx-auto w-full max-w-[480px]">
@@ -53,7 +99,7 @@ const Home = () => {
         <div className="flex items-center justify-between">
           <h1 className="text-lato text-xl font-bold leading-tight text-left text-custom-primary">Repostería Sánchez</h1>
           <Authorize requireAdmin={false}>
-            <button onClick={logout} className="px-4 py-1 text-sm bg-gray-500 text-white rounded-full">Cerrar Sesión</button>
+            <button onClick={logout} className="px-4 py-1 text-sm bg-gray-500 text-white rounded-full hover:bg-gray-600">Cerrar Sesión</button>
           </Authorize>
         </div>
         <Authorize>
@@ -76,17 +122,21 @@ const Home = () => {
         </p>
         <h2 className="mt-4 text-lg text-lato font-medium text-custom-primary">Categorías</h2>
         <Authorize>
-          <button onClick={handleOpenModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl">+</button>
+          <button onClick={openModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl hover:bg-lime-600">+</button>
+          <AddCategoryForm isOpen={isModalOpen} closeModal={closeModal} category={selectedCategory} />
         </Authorize>
 
-        <ModalForm isOpen={isModalOpen} onClose={handleCloseModal}>
-          {<CategoryForm />}
-        </ModalForm>
+        {/* Modal de Confirmación de Eliminación */}
+        <ConfirmDeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={closeDeleteModal}
+          onConfirm={confirmDelete}
+        />
 
         {categories
           .sort((a, b) => a.position - b.position)
           .map((category, index) => (
-            <CategoryCard key={index} {...category} onClick={() => goToDetails(category.id, category.name)} />
+            <CategoryCard key={index} {...category} onClick={() => goToDetails(category.id, category.name)} onEdit={() => handleEditClick(category)} onDelete={() => handleDeleteClick(category.id)} />
           ))}
       </section>
     </main>
