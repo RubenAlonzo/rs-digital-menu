@@ -93,12 +93,16 @@ export const updateCategory = async (categoryId, updatedData) => {
 // Delete Category
 export const deleteCategory = async (categoryId) => {
   try {
-    // Delete image from Cloud Storage
-    const imageRef = ref(storage, `category_images/${categoryId}`);
-    await deleteObject(imageRef);
+    const categoryRef = doc(db, "categories", categoryId);
+    const categorySnapshot = await getDoc(categoryRef);
 
-    // Delete category from Firestore
-    await deleteDoc(doc(db, "categories", categoryId));
+    const imageUrl = categorySnapshot.data().imageUrl;
+    if (imageUrl) {
+      const imageRef = ref(storage, imageUrl);
+      await deleteObject(imageRef);
+    }
+
+    await deleteDoc(categoryRef);
   } catch (error) {
     console.error("Error deleting category: ", error);
     throw error; // Re-throw the error to handle it in the calling function if needed

@@ -9,21 +9,22 @@ const AddCategoryForm = ({ isOpen, closeModal, category }) => {
     const [categoryName, setCategoryName] = useState('');
     const [isVisible, setIsVisible] = useState(true);
     const [image, setImage] = useState(null);
-    const [imageUrl, setImageUrl] = useState('');
+    const [isLoading, setIsLoading] = useState(false); 
 
     useEffect(() => {
         if (category) {
             setCategoryName(category.name);
             setIsVisible(category.isVisible);
-            setImageUrl(category.imageUrl);
             setImage(null);
         } else {
-            resetForm();
+            resetForm(); 
         }
-    }, [category]);
+        setIsLoading(false);
+    }, [category, isOpen]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setIsLoading(true);
 
         try {
             if (category) {
@@ -44,6 +45,8 @@ const AddCategoryForm = ({ isOpen, closeModal, category }) => {
             closeModal();
         } catch (error) {
             console.error("Error saving category:", error);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -51,7 +54,6 @@ const AddCategoryForm = ({ isOpen, closeModal, category }) => {
         setCategoryName('');
         setIsVisible(true);
         setImage(null);
-        setImageUrl('');
     };
 
     const handleCancel = () => {
@@ -82,10 +84,19 @@ const AddCategoryForm = ({ isOpen, closeModal, category }) => {
                     </label>
                 </div>
 
-                <ImageUpload label="Imagen de fondo:" onChange={setImage} existingImageUrl={imageUrl} />
+                <ImageUpload
+                    label="Imagen de fondo:"
+                    onChange={setImage}
+                    existingImageUrl={category ? category.imageUrl : ''}
+                    isEditing={!!category} // Pasar true si estamos editando
+                />
                 <div className="flex justify-end mt-6 space-x-4">
                     <Button type="button" text="Cancelar" onClick={handleCancel} className='bg-stone-500' />
-                    <Button type="submit" text={category ? "Guardar Cambios" : "Guardar"} />
+                    <Button
+                        type="submit"
+                        text={category ? "Guardar Cambios" : "Guardar"}
+                        disabled={isLoading} // Deshabilitar el botón si está en carga
+                    />
                 </div>
             </form>
         </Modal>

@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import CategoryCard from '../components/CategoryCard';
 import ContactInfo from '../components/ContactInfo';
-import { getCategories } from '../services/categoryService';
+import { getCategories, deleteCategory } from '../services/categoryService';
 import { logout } from '../services/authService';
 import Authorize from '../components/Authorize';
 import useNavigateSearch from '../hooks/useNavigateSearch';
 import AddCategoryForm from '../components/AddCategoryForm';
 import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
 import { fondoProductos, logoRS } from '../assets/icons/images';
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 
 
 const Home = () => {
@@ -15,24 +16,60 @@ const Home = () => {
   // Use useState to initialize categories as an empty array
   const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const openModal = () => setIsModalOpen(true);
-  // const closeModal = () => setIsModalOpen(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  useEffect(() => {
+    loadCategories(); // Cargar categorías al montar el componente
+  }, []);
+
+  const loadCategories = async () => {
+    try {
+      const data = await getCategories();
+      setCategories(data);
+      console.log("Fetched categories:", data);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    }
+  };
 
   const openModal = () => {
-    setSelectedCategory(null); // Para crear una nueva categoría
+    setSelectedCategory(null);
     setIsModalOpen(true);
-};
+  };
 
   const handleEditClick = (category) => {
     setSelectedCategory(category);
     setIsModalOpen(true);
-};
+  };
 
-const closeModal = () => {
-  setIsModalOpen(false);
-  setSelectedCategory(null);
-};
+  const handleDeleteClick = (categoryId) => {
+    setSelectedCategory(categoryId); // Guardar el ID de la categoría a eliminar
+    setDeleteModalOpen(true); // Abrir el modal de confirmación
+  };
+
+  const confirmDelete = async () => {
+    if (selectedCategory) {
+      try {
+        await deleteCategory(selectedCategory);
+        loadCategories(); // Volver a cargar las categorías después de la eliminación
+      } catch (error) {
+        console.error("Error deleting category:", error);
+      }
+    }
+    setDeleteModalOpen(false); // Cerrar el modal de confirmación
+    setSelectedCategory(null); // Limpiar la categoría seleccionada
+  };
+
+  const closeDeleteModal = () => {
+    setDeleteModalOpen(false);
+    setSelectedCategory(null);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedCategory(null);
+  };
 
   // Use useEffect to fetch categories when the component mounts
   useEffect(() => {
@@ -45,7 +82,7 @@ const closeModal = () => {
       .catch(error => {
         console.error("Failed to fetch categories:", error);
       });
-  }, [isModalOpen]); // Empty dependency array means this effect runs once on mount
+  }, [isModalOpen]);
 
   // Use the useNavigateSearch hook to navigate to the Details page
   const navigateSearch = useNavigateSearch();
@@ -89,10 +126,17 @@ const closeModal = () => {
           <AddCategoryForm isOpen={isModalOpen} closeModal={closeModal} category={selectedCategory} />
         </Authorize>
 
+        {/* Modal de Confirmación de Eliminación */}
+        <ConfirmDeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={closeDeleteModal}
+          onConfirm={confirmDelete}
+        />
+
         {categories
           .sort((a, b) => a.position - b.position)
           .map((category, index) => (
-            <CategoryCard key={index} {...category} onClick={() => goToDetails(category.id, category.name)} onEdit={() => handleEditClick(category)} />
+            <CategoryCard key={index} {...category} onClick={() => goToDetails(category.id, category.name)} onEdit={() => handleEditClick(category)} onDelete={() => handleDeleteClick(category.id)} />
           ))}
       </section>
     </main>
