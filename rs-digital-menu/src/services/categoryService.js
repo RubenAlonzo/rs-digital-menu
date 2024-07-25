@@ -109,13 +109,8 @@ export const deleteCategory = async (categoryId) => {
       }
     }
 
-    const imageUrl = categorySnapshot.data().imageUrl;
-    if (imageUrl) {
-      const imageRef = ref(storage, imageUrl);
-      await deleteObject(imageRef);
-    }
-
-    await deleteDoc(categoryRef);
+    // Delete category from Firestore
+    await deleteDoc(doc(db, "categories", categoryId));
   } catch (error) {
     console.error("Error deleting category: ", error);
     throw error; // Re-throw the error to handle it in the calling function if needed
