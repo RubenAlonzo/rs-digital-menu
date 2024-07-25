@@ -93,8 +93,21 @@ export const updateCategory = async (categoryId, updatedData) => {
 // Delete Category
 export const deleteCategory = async (categoryId) => {
   try {
-    const categoryRef = doc(db, "categories", categoryId);
-    const categorySnapshot = await getDoc(categoryRef);
+    // Reference to the image in Cloud Storage
+    const imageRef = ref(storage, `category_images/${categoryId}`);
+
+    // Attempt to delete the image from Cloud Storage
+    try {
+      await deleteObject(imageRef);
+      console.log("Image deleted at path:", imageRef.fullPath);
+    } catch (error) {
+      if (error.code === 'storage/object-not-found') {
+        console.log("Image does not exist, skipping deletion.");
+      } else {
+        console.error("Error deleting image: ", error);
+        throw error;
+      }
+    }
 
     const imageUrl = categorySnapshot.data().imageUrl;
     if (imageUrl) {
