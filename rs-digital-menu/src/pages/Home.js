@@ -15,8 +15,24 @@ const Home = () => {
   // Use useState to initialize categories as an empty array
   const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  // const openModal = () => setIsModalOpen(true);
+  // const closeModal = () => setIsModalOpen(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+
+  const openModal = () => {
+    setSelectedCategory(null); // Para crear una nueva categoría
+    setIsModalOpen(true);
+};
+
+  const handleEditClick = (category) => {
+    setSelectedCategory(category);
+    setIsModalOpen(true);
+};
+
+const closeModal = () => {
+  setIsModalOpen(false);
+  setSelectedCategory(null);
+};
 
   // Use useEffect to fetch categories when the component mounts
   useEffect(() => {
@@ -70,17 +86,13 @@ const Home = () => {
         <h2 className="mt-4 text-lg text-lato font-medium text-custom-primary">Categorías</h2>
         <Authorize>
           <button onClick={openModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl hover:bg-lime-600">+</button>
-          <AddCategoryForm isOpen={isModalOpen} closeModal={closeModal} />
+          <AddCategoryForm isOpen={isModalOpen} closeModal={closeModal} category={selectedCategory} />
         </Authorize>
-
-        {/* <ModalForm isOpen={isModalOpen} onClose={handleCloseModal}>
-          {<CategoryForm />}
-        </ModalForm> */}
 
         {categories
           .sort((a, b) => a.position - b.position)
           .map((category, index) => (
-            <CategoryCard key={index} {...category} onClick={() => goToDetails(category.id, category.name)} />
+            <CategoryCard key={index} {...category} onClick={() => goToDetails(category.id, category.name)} onEdit={() => handleEditClick(category)} />
           ))}
       </section>
     </main>

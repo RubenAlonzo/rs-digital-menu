@@ -1,40 +1,49 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Modal from './Modal';
 import Input from './Input';
 import Button from './Button';
 import ImageUpload from './ImageUpload';
-import { createCategory } from '../services/categoryService';
-import { useSearchParams } from 'react-router-dom';
+import { createCategory, updateCategory } from '../services/categoryService';
 
-const AddCategoryForm = ({ isOpen, closeModal }) => {
+const AddCategoryForm = ({ isOpen, closeModal, category }) => {
     const [categoryName, setCategoryName] = useState('');
     const [isVisible, setIsVisible] = useState(true);
     const [image, setImage] = useState(null);
-    const [searchParams] = useSearchParams();
+    const [imageUrl, setImageUrl] = useState('');
+
+    useEffect(() => {
+        if (category) {
+            setCategoryName(category.name);
+            setIsVisible(category.isVisible);
+            setImageUrl(category.imageUrl);
+            setImage(null);
+        } else {
+            resetForm();
+        }
+    }, [category]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log('Category name:', categoryName);
-        console.log('Is visible:', isVisible);
-        console.log('Category ID:', searchParams.get('categoryId'));
-
         try {
-            // Asegúrate de que image es un archivo antes de llamar a createCategory
-            if (image) {
+            if (category) {
+                await updateCategory(category.id, {
+                    name: categoryName,
+                    imageFile: image,
+                    isVisible: isVisible,
+                    position: category.position
+                });
+            } else {
                 await createCategory({
                     name: categoryName,
-                    imageFile: image, // Asegúrate de que este es un objeto File
+                    imageFile: image,
                     isVisible: isVisible,
                     position: 1,
-                    categoryId: searchParams.get('categoryId')
                 });
-                closeModal();
-            } else {
-                console.error("No image file selected");
             }
+            closeModal();
         } catch (error) {
-            console.error("Error creating category:", error);
+            console.error("Error saving category:", error);
         }
     };
 
@@ -42,6 +51,7 @@ const AddCategoryForm = ({ isOpen, closeModal }) => {
         setCategoryName('');
         setIsVisible(true);
         setImage(null);
+        setImageUrl('');
     };
 
     const handleCancel = () => {
@@ -51,7 +61,7 @@ const AddCategoryForm = ({ isOpen, closeModal }) => {
 
     return (
         <Modal isOpen={isOpen} closeModal={handleCancel}>
-            <h2 className="text-2xl font-bold text-stone-800">Agregar Categoría</h2>
+            <h2 className="text-2xl font-bold text-stone-800">{category ? 'Editar Categoría' : 'Agregar Categoría'}</h2>
             <form onSubmit={handleSubmit} className="flex flex-col">
                 <Input
                     label="Nombre de la categoría:"
@@ -72,10 +82,10 @@ const AddCategoryForm = ({ isOpen, closeModal }) => {
                     </label>
                 </div>
 
-                <ImageUpload label="Imagen de fondo:" onChange={setImage} />
+                <ImageUpload label="Imagen de fondo:" onChange={setImage} existingImageUrl={imageUrl} />
                 <div className="flex justify-end mt-6 space-x-4">
                     <Button type="button" text="Cancelar" onClick={handleCancel} className='bg-stone-500' />
-                    <Button type="submit" text="Guardar" />
+                    <Button type="submit" text={category ? "Guardar Cambios" : "Guardar"} />
                 </div>
             </form>
         </Modal>

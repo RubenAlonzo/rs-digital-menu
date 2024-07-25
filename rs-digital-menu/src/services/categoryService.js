@@ -1,4 +1,4 @@
-import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc } from "firebase/firestore";
+import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { db, storage } from "../firebaseConfig";
 
@@ -52,19 +52,41 @@ export const getCategories = async () => {
 // Update Category
 export const updateCategory = async (categoryId, updatedData) => {
   try {
-    if (updatedData.imageFile) {
-      // Upload new image to Cloud Storage
-      const imageRef = ref(storage, `category_images/${categoryId}`);
-      await uploadBytes(imageRef, updatedData.imageFile);
-      updatedData.imageUrl = await getDownloadURL(imageRef);
-      delete updatedData.imageFile;
-    }
+      // Obtener una referencia al documento de la categoría
+      const categoryRef = doc(db, 'categories', categoryId);
 
-    // Update category in Firestore
-    await updateDoc(doc(db, "categories", categoryId), updatedData);
+      // Obtener la instantánea del documento de categoría existente en Firestore
+      const categorySnapshot = await getDoc(categoryRef);
+
+      if (!categorySnapshot.exists()) {
+          console.error('Categoría no encontrada');
+          return;
+      }
+
+      // Actualizar los datos de la categoría
+      const updatedFields = { ...updatedData };
+
+      // Si se proporciona un nuevo archivo de imagen
+      if (updatedData.imageFile) {
+          // Eliminar la imagen antigua de Cloud Storage
+          const oldImageUrl = categorySnapshot.data().imageUrl;
+          if (oldImageUrl) {
+              const oldImageRef = ref(storage, oldImageUrl);
+              await deleteObject(oldImageRef);
+          }
+
+          // Subir la nueva imagen a Cloud Storage
+          const imageRef = ref(storage, `category_images/${categoryId}`);
+          await uploadBytes(imageRef, updatedData.imageFile);
+          updatedFields.imageUrl = await getDownloadURL(imageRef);
+          delete updatedFields.imageFile;
+      }
+
+      // Actualizar la categoría en Firestore
+      await updateDoc(categoryRef, updatedFields);
   } catch (error) {
-    console.error("Error updating category: ", error);
-    throw error; // Re-throw the error to handle it in the calling function if needed
+      console.error('Error al actualizar la categoría:', error);
+      throw error;
   }
 };
 
