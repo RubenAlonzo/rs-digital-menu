@@ -4,7 +4,7 @@ import Authorize from './Authorize';
 import { EditIcon, DeleteIcon } from '../assets/icons/icons';
 import DeleteConfirmationModal from './DeleteConfirmationModal';
 
-const CategoryItem = ({ id, imageUrl, name, price, description, handleDelete }) => {
+const CategoryItem = ({ id, imageUrl, name, price, description, handleDelete, handleEdit }) => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   return (
@@ -14,7 +14,7 @@ const CategoryItem = ({ id, imageUrl, name, price, description, handleDelete }) 
         <h3>{name}</h3>
         <Authorize>
           <div className="absolute top-5 right-1 flex items-center">
-            <button className="bg-gray-100 rounded-l-full w-8 h-8 flex justify-center items-center">
+            <button onClick={handleEdit} className="bg-gray-100 rounded-l-full w-8 h-8 flex justify-center items-center">
               <EditIcon />
             </button>
             <div className="w-px h-8 bg-gray-500"></div>

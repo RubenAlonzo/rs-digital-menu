@@ -13,19 +13,29 @@ import { useAuth } from '../hooks/useAuth';
 
 function Details() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const [categoryToEdit, setCategoryToEdit] = useState(null);
   const { currentUser } = useAuth();
-
+  
   // Use useState to initialize categories as an empty array
   const [products, setProducts] = useState([]);
-
+  
   // Use useSearchParams to get the categoryId from the URL
   const [searchParams] = useSearchParams();
-
+  
+  const closeModal = () => setIsModalOpen(false);
+  const openModal = () => {
+    setCategoryToEdit(null);
+    setIsModalOpen(true);
+  };
+  
   const handleDelete = async (id) => {
     await deleteProduct(id);
     await loadProducts();
+  };
+
+  const handleEdit = (item) => {
+    setCategoryToEdit(item);
+    setIsModalOpen(true);
   };
 
   const loadProducts = async () => {
@@ -78,7 +88,7 @@ function Details() {
         <Authorize>
           <div>
             <Button text="Agregar" onClick={openModal} className='text-sm hover:bg-lime-700 ' />
-            <AddProductForm isOpen={isModalOpen} closeModal={closeModal} />
+            <AddProductForm isOpen={isModalOpen} closeModal={closeModal} category={categoryToEdit ? categoryToEdit : null} />
           </div>
         </Authorize>
       </div>
@@ -86,7 +96,7 @@ function Details() {
         {products
           .sort((a, b) => a.position - b.position)
           .map((item, index) => (
-            <CategoryItem key={index} {...item} handleDelete={handleDelete} />
+            <CategoryItem key={index} {...item} handleEdit={() => handleEdit(item)} handleDelete={handleDelete} />
           ))}
       </div>
     </PageLayout>
