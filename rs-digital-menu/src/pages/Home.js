@@ -6,7 +6,7 @@ import { logout } from '../services/authService';
 import Authorize from '../components/Authorize';
 import useNavigateSearch from '../hooks/useNavigateSearch';
 import AddCategoryForm from '../components/AddCategoryForm';
-import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
+import { LocationIcon, PhoneIcon, WhatsAppIcon, AddIcon } from '../assets/icons/icons';
 import { fondoProductos, logoRS } from '../assets/icons/images';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
 
@@ -95,9 +95,9 @@ const Home = () => {
 
         <img loading="lazy" src={logoRS} alt="Logo" className="mb-3 w-56 max-w-full aspect-[1.85] relative z-10" />
       </header>
-      <section className="flex rounded-t-3xl z-10 flex-col px-5 py-8 -mt-5 w-full bg-white rounded-[32px_32px_0px_0px] border border-x-4 border-white">
+      <section className="flex rounded-t-3xl z-10 flex-col px-5 py-8 -mt-5 w-full min-h-screen bg-white rounded-[32px_32px_0px_0px] border border-x-4 border-white">
         <div className="flex items-center justify-between">
-          <h1 className="text-lato text-xl font-bold leading-tight text-left text-custom-primary">Repostería Sánchez</h1>
+          <h1 className="text-lato text-xl font-bold leading-tight text-left">Repostería Sánchez</h1>
           <Authorize requireAdmin={false}>
             <button onClick={logout} className="px-4 py-1 text-sm bg-gray-500 text-white rounded-full hover:bg-gray-600">Cerrar Sesión</button>
           </Authorize>
@@ -117,12 +117,12 @@ const Home = () => {
           icon={WhatsAppIcon}
           text="(809) 586-8851"
         />
-        <p className="mt-4 text-custom-primary ">
+        <p className="mt-4">
           Pastelería especializada en la creación de tartas matrimoniales
         </p>
-        <h2 className="mt-4 text-lg text-lato font-medium text-custom-primary">Categorías</h2>
+        <h2 className="mt-4 text-lg text-lato font-medium">Categorías</h2>
         <Authorize>
-          <button onClick={openModal} className="mt-3 py-0 bg-lime-500 text-white rounded-full text-3xl hover:bg-lime-600">+</button>
+          <button onClick={openModal} className="mt-3 flex justify-center items-center py-0 bg-lime-500 rounded-full text-3xl hover:bg-lime-600"><AddIcon /></button>
           <AddCategoryForm isOpen={isModalOpen} closeModal={closeModal} category={selectedCategory} />
         </Authorize>
 

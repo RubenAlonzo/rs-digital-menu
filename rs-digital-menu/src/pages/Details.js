@@ -7,7 +7,7 @@ import Button from '../components/Button';
 import AddProductForm from '../components/AddProductForm';
 import Authorize from '../components/Authorize';
 import { getProductsByCategory, deleteProduct } from '../services/productService';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { fondoProductos, logoRS } from '../assets/icons/images';
 import { useAuth } from '../hooks/useAuth';
 
@@ -15,19 +15,19 @@ function Details() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [categoryToEdit, setCategoryToEdit] = useState(null);
   const { currentUser } = useAuth();
-  
+
   // Use useState to initialize categories as an empty array
   const [products, setProducts] = useState([]);
-  
+
   // Use useSearchParams to get the categoryId from the URL
   const [searchParams] = useSearchParams();
-  
+
   const closeModal = () => setIsModalOpen(false);
   const openModal = () => {
     setCategoryToEdit(null);
     setIsModalOpen(true);
   };
-  
+
   const handleDelete = async (id) => {
     await deleteProduct(id);
     await loadProducts();
@@ -82,9 +82,11 @@ function Details() {
       description="Pastelería especializada en la creación de tartas matrimoniales"
     >
       <div className='mt-4 flex justify-between'>
-        <h2 className="text-lg font-medium text-custom-primary">
-          <span className="text-stone-500">Categorías /</span> {searchParams.get('name')}
-        </h2>
+        <h1 className="text-xl font-medium mt-1">
+          <Link to="/">
+            <span className="text-stone-500">Categorías /</span> {searchParams.get('name')}
+          </Link>
+        </h1>
         <Authorize>
           <div>
             <Button text="Agregar" onClick={openModal} className='text-sm hover:bg-lime-700 ' />
