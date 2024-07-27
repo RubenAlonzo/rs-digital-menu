@@ -73,7 +73,7 @@ export const getProductsByCategory = async (categoryId, isAdmin = false) => {
 // Update Product
 export const updateProduct = async (productId, updatedData) => {
   try {
-    if (updatedData.imageFile) {
+    if (updatedData.imageFile instanceof File) {
       // Upload new image to Cloud Storage
       const imageRef = ref(storage, `product_images/${productId}`);
       await uploadBytes(imageRef, updatedData.imageFile);

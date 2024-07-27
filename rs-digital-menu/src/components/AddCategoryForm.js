@@ -87,8 +87,7 @@ const AddCategoryForm = ({ isOpen, closeModal, category }) => {
                 <ImageUpload
                     label="Imagen de fondo:"
                     onChange={setImage}
-                    existingImageUrl={category ? category.imageUrl : ''}
-                    isEditing={!!category} // Pasar true si estamos editando
+                    imageUrl={category ? category.imageUrl : null}
                 />
                 <div className="flex justify-end mt-6 space-x-4">
                     <Button type="button" text="Cancelar" onClick={handleCancel} className='bg-stone-500' />

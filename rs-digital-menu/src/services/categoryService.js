@@ -67,7 +67,7 @@ export const updateCategory = async (categoryId, updatedData) => {
       const updatedFields = { ...updatedData };
 
       // Si se proporciona un nuevo archivo de imagen
-      if (updatedData.imageFile) {
+      if (updatedData.imageFile instanceof File) {
           // Eliminar la imagen antigua de Cloud Storage
           const oldImageUrl = categorySnapshot.data().imageUrl;
           if (oldImageUrl) {

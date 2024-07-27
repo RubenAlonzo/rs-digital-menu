@@ -16,7 +16,6 @@ const AddProductForm = ({ isOpen, closeModal, category = null }) => {
   const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    console.log('initialData:', category);
     if (category) {
       setProductName(category.name);
       setProductPrice(category.price);
@@ -30,10 +29,6 @@ const AddProductForm = ({ isOpen, closeModal, category = null }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle form submission logic
-    console.log('Product name:', productName);
-    console.log('Description:', description);
-    console.log('Is visible:', isVisible);
-    console.log(searchParams.get('categoryId'));
     if (category) {
       await updateProduct(category.id, {name: productName, price: productPrice, description: description, imageFile: image, isVisible: isVisible, position: 1, categoryId: searchParams.get('categoryId')});
     } else {
@@ -57,7 +52,7 @@ const AddProductForm = ({ isOpen, closeModal, category = null }) => {
 
   return (
     <Modal isOpen={isOpen} closeModal={handleCancel}>
-      <h2 className="text-2xl font-bold text-stone-800">Agregar producto</h2>
+      <h2 className="text-2xl font-bold text-stone-800">{category ? "Editar producto" : "Agregar producto"}</h2>
       <form onSubmit={handleSubmit} className="flex flex-col">
         <Input
           label="Nombre del producto:"

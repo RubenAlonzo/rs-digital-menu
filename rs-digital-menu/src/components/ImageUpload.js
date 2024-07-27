@@ -6,7 +6,6 @@ const ImageUpload = ({ label, onChange, imageUrl = null }) => {
   const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
-    console.log('initialData:', imageUrl);
     if (imageUrl) {
       setImage(imageUrl);
     } else {
@@ -22,7 +21,6 @@ const ImageUpload = ({ label, onChange, imageUrl = null }) => {
         const imageData = e.target.result;
         setImage(imageData);
         onChange(file); // Pass the actual file instead of base64 data
-        console.log('Selected image:', file);
       };
       reader.readAsDataURL(file);
     } else {
