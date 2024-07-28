@@ -90,12 +90,8 @@ const AddCategoryForm = ({ isOpen, closeModal, category }) => {
                     imageUrl={category ? category.imageUrl : null}
                 />
                 <div className="flex justify-end mt-6 space-x-4">
-                    <Button type="button" text="Cancelar" onClick={handleCancel} className='bg-stone-500' />
-                    <Button
-                        type="submit"
-                        text={category ? "Guardar Cambios" : "Guardar"}
-                        disabled={isLoading} // Deshabilitar el botón si está en carga
-                    />
+                  <Button type="button" text="Cancelar" onClick={handleCancel} className='bg-stone-500 hover:bg-stone-600' />
+                  <Button type="submit" text="Guardar" disabled={isLoading} className='hover:bg-lime-700 '/>  
                 </div>
             </form>
         </Modal>
