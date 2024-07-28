@@ -89,7 +89,7 @@ function Details() {
         </h1>
         <Authorize>
           <div>
-            <Button text="Agregar" onClick={openModal} className='text-sm hover:bg-lime-700 ' />
+            <Button text="Agregar" onClick={openModal} className='text-sm hover:bg-lime-700' />
             <AddProductForm isOpen={isModalOpen} closeModal={closeModal} category={categoryToEdit ? categoryToEdit : null} />
           </div>
         </Authorize>

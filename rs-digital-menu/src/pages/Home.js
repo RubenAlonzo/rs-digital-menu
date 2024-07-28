@@ -6,10 +6,10 @@ import { logout } from '../services/authService';
 import Authorize from '../components/Authorize';
 import useNavigateSearch from '../hooks/useNavigateSearch';
 import AddCategoryForm from '../components/AddCategoryForm';
-import { LocationIcon, PhoneIcon, WhatsAppIcon, AddIcon } from '../assets/icons/icons';
+import { LocationIcon, PhoneIcon, WhatsAppIcon } from '../assets/icons/icons';
 import { fondoProductos, logoRS } from '../assets/icons/images';
 import ConfirmDeleteModal from '../components/ConfirmDeleteModal';
-
+import Button from '../components/Button';
 
 const Home = () => {
 
@@ -102,9 +102,6 @@ const Home = () => {
             <button onClick={logout} className="px-4 py-1 text-sm bg-gray-500 text-white rounded-full hover:bg-gray-600">Cerrar Sesión</button>
           </Authorize>
         </div>
-        <Authorize>
-          <p className='text-green-600 font-medium'>Sesión iniciada como adminstrador</p>
-        </Authorize>
         <ContactInfo
           icon={LocationIcon}
           text="Av. 26 de Agosto #9, Puerto Plata, Rep. Dom"
@@ -120,12 +117,16 @@ const Home = () => {
         <p className="mt-4">
           Pastelería especializada en la creación de tartas matrimoniales
         </p>
-        <h2 className="mt-4 text-lg text-lato font-medium">Categorías</h2>
-        <Authorize>
-          <button onClick={openModal} className="mt-3 flex justify-center items-center py-0 bg-lime-500 rounded-full text-3xl hover:bg-lime-600"><AddIcon /></button>
-          <AddCategoryForm isOpen={isModalOpen} closeModal={closeModal} category={selectedCategory} />
-        </Authorize>
 
+        <div className='mt-4 flex justify-between'>
+          <h2 className="text-lg font-medium text-custom-primary">Categorías</h2>
+          <Authorize>
+            <div>
+              <Button text="Agregar" onClick={openModal} className='text-sm hover:bg-lime-700 ' />
+              <AddCategoryForm isOpen={isModalOpen} closeModal={closeModal} category={selectedCategory} />
+            </div>
+          </Authorize>
+        </div>
         {/* Modal de Confirmación de Eliminación */}
         <ConfirmDeleteModal
           isOpen={isDeleteModalOpen}

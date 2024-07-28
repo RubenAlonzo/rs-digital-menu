@@ -14,11 +14,11 @@ const CategoryItem = ({ id, imageUrl, name, price, description, handleDelete, ha
         <h3>{name}</h3>
         <Authorize>
           <div className="absolute top-4 right-1 flex items-center">
-            <button onClick={handleEdit} className="bg-gray-100 rounded-l-full w-8 h-8 flex justify-center items-center">
+            <button onClick={handleEdit} className="bg-gray-100 hover:bg-gray-200 rounded-l-full w-10 h-10 flex justify-center items-center">
               <EditIcon />
             </button>
             <div className="w-px h-8 bg-gray-500"></div>
-            <button onClick={() => setIsDeleteModalOpen(true)} className="bg-gray-100 rounded-r-full w-8 h-8 flex justify-center items-center">
+            <button onClick={() => setIsDeleteModalOpen(true)} className="bg-gray-100 hover:bg-gray-200 rounded-r-full w-10 h-10 flex justify-center items-center">
               <DeleteIcon />
             </button>
             {isDeleteModalOpen && (
@@ -31,7 +31,7 @@ const CategoryItem = ({ id, imageUrl, name, price, description, handleDelete, ha
           </div>
         </Authorize>
         <p className="font-light -my-1">{formatCurrency(price)}</p>
-        <p className="text-sm font-normal py-4 text-stone-500">{description}</p>
+        <p className="text-sm font-semibold py-4 text-stone-500">{description}</p>
       </div>
     </div>
   );
