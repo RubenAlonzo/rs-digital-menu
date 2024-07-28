@@ -8,12 +8,7 @@ module.exports = {
       fontFamily: {
         lato: ['Lato', 'sans-serif'],
       },
-      colors: {
-        custom: {
-          'primary': '#48352F',
-          'secondary': '#806860', 
-        },
-      },
+      colors: {},
     },
   },
   plugins: [],
