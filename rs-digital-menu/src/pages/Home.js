@@ -114,9 +114,7 @@ const Home = () => {
           icon={WhatsAppIcon}
           text="(809) 586-8851"
         />
-        <p className="mt-4">
-          Pastelería especializada en la creación de tartas matrimoniales
-        </p>
+        <p className="mt-4">Repostería especializada en pasteles para todo tipos de eventos.</p>
 
         <div className='mt-4 flex justify-between'>
           <h2 className="text-lg font-medium text-custom-primary">Categorías</h2>

@@ -79,7 +79,7 @@ function Details() {
           />
         </>
       }
-      description="Pastelería especializada en la creación de tartas matrimoniales"
+      description="Repostería especializada en pasteles para todo tipos de eventos."
     >
       <div className='mt-4 flex justify-between'>
         <h1 className="text-xl font-medium mt-1">
