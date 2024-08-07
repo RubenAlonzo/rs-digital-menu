@@ -1,6 +1,7 @@
 import { collection, doc, getDocs, addDoc, updateDoc, deleteDoc, getDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 import { db, storage } from "../firebaseConfig";
+import { deleteProduct, getProductsByCategory } from './productService';
 
 // CRUD for Categories
 
@@ -93,24 +94,33 @@ export const updateCategory = async (categoryId, updatedData) => {
 // Delete Category
 export const deleteCategory = async (categoryId) => {
   try {
-    // Reference to the image in Cloud Storage
-    const imageRef = ref(storage, `category_images/${categoryId}`);
+    // Step 1: Fetch all products associated with the category
+    const products = await getProductsByCategory(categoryId, true);
 
-    // Attempt to delete the image from Cloud Storage
+    // Step 2: Delete each product using the deleteProduct method from productService
+    for (const product of products) {
+      await deleteProduct(product.id);
+    }
+
+    // Step 3: Reference to the category image in Cloud Storage
+    const categoryImageRef = ref(storage, `category_images/${categoryId}`);
+
+    // Attempt to delete the category image from Cloud Storage
     try {
-      await deleteObject(imageRef);
-      console.log("Image deleted at path:", imageRef.fullPath);
+      await deleteObject(categoryImageRef);
+      console.log("Category image deleted at path:", categoryImageRef.fullPath);
     } catch (error) {
       if (error.code === 'storage/object-not-found') {
-        console.log("Image does not exist, skipping deletion.");
+        console.log("Category image does not exist, skipping deletion.");
       } else {
-        console.error("Error deleting image: ", error);
+        console.error("Error deleting category image: ", error);
         throw error;
       }
     }
 
-    // Delete category from Firestore
+    // Step 4: Delete category document from Firestore
     await deleteDoc(doc(db, "categories", categoryId));
+    console.log(`Category with ID ${categoryId} has been deleted.`);
   } catch (error) {
     console.error("Error deleting category: ", error);
     throw error; // Re-throw the error to handle it in the calling function if needed
