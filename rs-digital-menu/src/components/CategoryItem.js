@@ -30,7 +30,7 @@ const CategoryItem = ({ id, imageUrl, name, price, description, handleDelete, ha
             )}
           </div>
         </Authorize>
-        <p className="font-light -my-1">{formatCurrency(price)}</p>
+        <p className="font-normal -my-1">{formatCurrency(price)}</p>
         <p className="text-sm font-semibold py-4 text-stone-500">{description}</p>
       </div>
     </div>
