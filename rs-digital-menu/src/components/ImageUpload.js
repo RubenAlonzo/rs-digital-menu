@@ -15,7 +15,7 @@ const ImageUpload = ({ label, onChange, imageUrl = null }) => {
 
   const handleImageChange = (e) => {
     const file = e.target.files ? e.target.files[0] : e.dataTransfer.files[0];
-    if (file && (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg')) {
+    if (file && (file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/webp' || file.type === 'image/avif')) {
       const reader = new FileReader();
       reader.onload = (e) => {
         const imageData = e.target.result;
@@ -60,7 +60,7 @@ const ImageUpload = ({ label, onChange, imageUrl = null }) => {
                 <input
                   className="p-11 hover:cursor-pointer opacity-0"
                   type="file"
-                  accept="image/jpeg, image/png, image/jpg"
+                  accept="image/jpeg, image/png, image/jpg, image/webp, image/avif"
                   onChange={handleImageChange}
                   />
               </div>
@@ -71,7 +71,7 @@ const ImageUpload = ({ label, onChange, imageUrl = null }) => {
             Subir imagen de producto
             <input
               type="file"
-              accept="image/jpeg, image/png, image/jpg"
+              accept="image/jpeg, image/png, image/jpg, image/webp, image/avif"
               className="hidden"
               onChange={handleImageChange}
             />
