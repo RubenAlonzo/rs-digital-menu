@@ -107,11 +107,11 @@ const Home = () => {
           text="Av. 26 de Agosto #9, Puerto Plata, Rep. Dom"
         />
         <ContactInfo
-          icon={PhoneIcon}
+          icon={WhatsAppIcon}
           text="(829) 910-9672 / (849) 859-6945"
         />
         <ContactInfo
-          icon={WhatsAppIcon}
+          icon={PhoneIcon}
           text="(809) 586-8851"
         />
         <p className="mt-4">Repostería especializada en pasteles para todo tipos de eventos.</p>
